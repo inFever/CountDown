@@ -15,6 +15,7 @@
     // Insert code here to initialize your application
     date = [NSDate dateWithString:@"2013-05-14 08:45:00 -0700"];
     dp.dateValue = date;
+    dp.delegate = self;
     thread = [[NSThread alloc] initWithTarget:self selector:@selector(updateThread) object:nil];
     [thread start];
 }
