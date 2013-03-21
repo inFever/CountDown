@@ -13,6 +13,7 @@
 		8937F19B16FAF68C006E55D9 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8937F19916FAF68C006E55D9 /* Credits.rtf */; };
 		8937F19E16FAF68C006E55D9 /* RBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8937F19D16FAF68C006E55D9 /* RBAppDelegate.m */; };
 		8937F1A116FAF68C006E55D9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8937F19F16FAF68C006E55D9 /* MainMenu.xib */; };
+		8937F1A916FB0A04006E55D9 /* RBCountDownClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 8937F1A816FB0A04006E55D9 /* RBCountDownClock.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,8 @@
 		8937F19C16FAF68C006E55D9 /* RBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBAppDelegate.h; sourceTree = "<group>"; };
 		8937F19D16FAF68C006E55D9 /* RBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RBAppDelegate.m; sourceTree = "<group>"; };
 		8937F1A016FAF68C006E55D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		8937F1A716FB0A04006E55D9 /* RBCountDownClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBCountDownClock.h; sourceTree = "<group>"; };
+		8937F1A816FB0A04006E55D9 /* RBCountDownClock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBCountDownClock.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +87,8 @@
 			children = (
 				8937F19C16FAF68C006E55D9 /* RBAppDelegate.h */,
 				8937F19D16FAF68C006E55D9 /* RBAppDelegate.m */,
+				8937F1A716FB0A04006E55D9 /* RBCountDownClock.h */,
+				8937F1A816FB0A04006E55D9 /* RBCountDownClock.m */,
 				8937F19F16FAF68C006E55D9 /* MainMenu.xib */,
 				8937F19116FAF68C006E55D9 /* Supporting Files */,
 			);
@@ -169,6 +174,7 @@
 			files = (
 				8937F19716FAF68C006E55D9 /* main.m in Sources */,
 				8937F19E16FAF68C006E55D9 /* RBAppDelegate.m in Sources */,
+				8937F1A916FB0A04006E55D9 /* RBCountDownClock.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
