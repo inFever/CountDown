@@ -19,6 +19,8 @@
         time = 0;
         al = 10;
         t = [NSTimer scheduledTimerWithTimeInterval:1.0/30.0 target:self selector:@selector(runTimeStuff) userInfo:nil repeats:YES];
+        cv = [[RBClockView alloc] initWithFrame:frame];
+        [self addSubview:cv];
     }
     
     return self;
@@ -58,10 +60,15 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     double x = dirtyRect.origin.x + (dirtyRect.size.width / 2.0);
-    al = dirtyRect.size.width / 2.0;
-    if (dirtyRect.size.height < dirtyRect.size.width)
-        al = dirtyRect.size.height / 2.0;
     double y = dirtyRect.origin.y + (dirtyRect.size.height / 2.0);
+    double a = dirtyRect.size.width / 2.0;
+    if (dirtyRect.size.height < dirtyRect.size.width)
+        a = dirtyRect.size.height / 2.0;
+    if (a != al) {
+        [cv setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
+        [cv setNeedsDisplay:YES];
+        al = a;
+    }
     NSPoint center = NSMakePoint(x, y);
     NSPoint weekPoint, dayPoint, hourPoint, minutePoint, secondPoint;
     double s, m, h, d, w;
@@ -87,31 +94,15 @@
     
     NSBezierPath *lines;
     
-    if (floor(s) > 0 && floor(m) > 0 && floor(h) > 0 && floor(d) > 0 && floor(w) > 0) {
+    if (floor(w) > 0) {
         lines = [NSBezierPath bezierPath];
         [lines moveToPoint:center];
-        [lines lineToPoint:secondPoint];
-        [[NSColor redColor] set];
+        [lines lineToPoint:weekPoint];
+        [[NSColor blueColor] set];
         [lines stroke];
     }
     
-    if (floor(m) > 0 && floor(h) > 0 && floor(d) > 0 && floor(w) > 0) {
-        lines = [NSBezierPath bezierPath];
-        [lines moveToPoint:center];
-        [lines lineToPoint:minutePoint];
-        [[NSColor orangeColor] set];
-        [lines stroke];
-    }
-    
-    if (floor(h) > 0 && floor(d) > 0 && floor(w) > 0) {
-        lines = [NSBezierPath bezierPath];
-        [lines moveToPoint:center];
-        [lines lineToPoint:hourPoint];
-        [[NSColor greenColor] set];
-        [lines stroke];
-    }
-    
-    if (floor(d) > 0 && floor(w) > 0) {
+    if (floor(d) > 0 || floor(w) > 0) {
         lines = [NSBezierPath bezierPath];
         [lines moveToPoint:center];
         [lines lineToPoint:dayPoint];
@@ -119,11 +110,27 @@
         [lines stroke];
     }
     
-    if (floor(w) > 0) {
+    if (floor(h) > 0 || floor(d) > 0 || floor(w) > 0) {
         lines = [NSBezierPath bezierPath];
         [lines moveToPoint:center];
-        [lines lineToPoint:weekPoint];
-        [[NSColor blueColor] set];
+        [lines lineToPoint:hourPoint];
+        [[NSColor greenColor] set];
+        [lines stroke];
+    }
+    
+    if (floor(m) > 0 || floor(h) > 0 || floor(d) > 0 || floor(w) > 0) {
+        lines = [NSBezierPath bezierPath];
+        [lines moveToPoint:center];
+        [lines lineToPoint:minutePoint];
+        [[NSColor orangeColor] set];
+        [lines stroke];
+    }
+    
+    if (floor(s) > 0 || floor(m) > 0 || floor(h) > 0 || floor(d) > 0 || floor(w) > 0) {
+        lines = [NSBezierPath bezierPath];
+        [lines moveToPoint:center];
+        [lines lineToPoint:secondPoint];
+        [[NSColor redColor] set];
         [lines stroke];
     }
 }
