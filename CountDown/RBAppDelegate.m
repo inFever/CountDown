@@ -13,6 +13,8 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    [[self window] setLevel:NSFloatingWindowLevel];
+    [[[self window] standardWindowButton:NSWindowCloseButton] setEnabled:NO];
     date = [NSDate dateWithString:@"2013-05-03 15:00:00 -0700"];
     dp.dateValue = date;
     dp.delegate = self;
@@ -39,7 +41,7 @@
     NSTimeInterval i = [date timeIntervalSinceNow];
     int t = (int)i;
     int s, m, h, d, w;
-    s = (int)floor(t);
+    s = (int)ceil(t);
     d = s / (60*60*24);
     m = s / 60;
     h = (m / 60) % 24;
@@ -70,6 +72,20 @@
     while (1) {
         [self internalUpdate];
         [NSThread sleepForTimeInterval:1.0/30.0];
+    }
+}
+
+-(void)windowDidBecomeMain:(NSNotification *)notification
+{
+    [[self window] setLevel:NSNormalWindowLevel];
+}
+
+-(void)windowDidResignMain:(NSNotification *)notification
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAlwaysOnTop"]) {
+        [[self window] setLevel:NSFloatingWindowLevel];
+    } else {
+        [[self window] setLevel:NSNormalWindowLevel];
     }
 }
 
