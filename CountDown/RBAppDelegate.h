@@ -23,8 +23,6 @@
     NSDateFormatter *df;
     
     NSMenu *pubMenu;
-    NSArray *_reminders;
-    NSArray *_events;
     NSMutableDictionary *eventItems;
     
     

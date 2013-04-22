@@ -9,6 +9,9 @@
 #import "RBAppDelegate.h"
 #import <EventKit/EventKit.h>
 
+#define DATE_KEY @"RBDate"
+#define TITLE_KEY @"RBTitle"
+
 @implementation RBAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
@@ -18,8 +21,12 @@
     queue = dispatch_queue_create("queue", 0);
     [self retrieveEvents];
     
-    title = @"Unknown";
-    date = [NSDate dateWithString:@"2013-05-14 08:45:00 -0700"];
+    title = [[NSUserDefaults standardUserDefaults] stringForKey:TITLE_KEY];
+    if (title == nil)
+        title = @"Unknown";
+    date = (NSDate *)[[NSUserDefaults standardUserDefaults] objectForKey:DATE_KEY];
+    if (date == nil)
+        date = [NSDate dateWithString:@"2013-05-14 08:45:00 -0700"];
     dp.dateValue = date;
     dp.delegate = self;
     thread = [[NSThread alloc] initWithTarget:self selector:@selector(updateThread) object:nil];
@@ -71,6 +78,10 @@
     NSString *key = [i title];
     date = (NSDate *)[eventItems objectForKey:key];
     title = key;
+    
+    [[NSUserDefaults standardUserDefaults] setObject:title forKey:TITLE_KEY];
+    [[NSUserDefaults standardUserDefaults] setObject:date forKey:DATE_KEY];
+    
     dp.dateValue = date;
 }
 
@@ -117,7 +128,6 @@
                     return (NSComparisonResult)NSOrderedSame;
             }
         }];
-        _events = events;
         for (EKEvent *e in events) {
             NSDate *d = [[[e alarms] objectAtIndex:0] absoluteDate];
             NSString *t = [e title];
@@ -172,9 +182,7 @@
                 else
                     return (NSComparisonResult)NSOrderedSame;
             }
-        }];
-        _reminders = reminders;
-        
+        }];        
         for (EKReminder *e in reminders) {
             NSDate *d = [[[e alarms] objectAtIndex:0] absoluteDate];
             NSString *t = [e title];
@@ -184,16 +192,6 @@
                 [pubMenu addItem:i];
                 [eventItems setValue:d forKey:t];
             }
-        }
-        
-        for (EKReminder *r in reminders) {
-            NSDate *d = [[[r alarms] objectAtIndex:0] absoluteDate];
-            title = r.title;
-            if (d == nil)
-                continue;
-            date = d;
-            dp.dateValue = date;
-            return;
         }
     }];
 }
@@ -209,6 +207,7 @@
 -(void)datePickerCell:(NSDatePickerCell *)aDatePickerCell validateProposedDateValue:(NSDate *__autoreleasing *)proposedDateValue timeInterval:(NSTimeInterval *)proposedTimeInterval
 {
     date = *proposedDateValue;
+    [[NSUserDefaults standardUserDefaults] setObject:date forKey:DATE_KEY];
     [self internalUpdate];
 }
 

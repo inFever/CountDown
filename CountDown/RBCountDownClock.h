@@ -10,12 +10,16 @@
 
 #import "RBClockView.h"
 
+#import "RBLine.h"
+
 @interface RBCountDownClock : NSView
 {
     NSTimeInterval time;
     double al;
     NSTimer *t;
     RBClockView *cv;
+    
+    RBLine *weeks, *days, *hours, *minutes, *seconds;
 }
 
 -(void)updateTime:(NSTimeInterval)newTime;

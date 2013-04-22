@@ -20,6 +20,36 @@
         al = 10;
         t = [NSTimer scheduledTimerWithTimeInterval:1.0/30.0 target:self selector:@selector(runTimeStuff) userInfo:nil repeats:YES];
         cv = [[RBClockView alloc] initWithFrame:frame];
+        
+        weeks = [[RBLine alloc] initWithFrame:frame];
+        weeks.color = [NSColor blueColor];
+        days = [[RBLine alloc] initWithFrame:frame];
+        days.color = [NSColor colorWithSRGBRed:0 green:0.5 blue:1.0 alpha:1.0];
+        hours = [[RBLine alloc] initWithFrame:frame];
+        hours.color = [NSColor greenColor];
+        minutes = [[RBLine alloc] initWithFrame:frame];
+        minutes.color = [NSColor orangeColor];
+        seconds = [[RBLine alloc] initWithFrame:frame];
+        seconds.color = [NSColor redColor];
+        
+        //[self addSubview:seconds];
+        
+        double x = frame.origin.x + (frame.size.width / 2.0);
+        double y = frame.origin.y + (frame.size.height / 2.0);
+        double a = frame.size.width / 2.0;
+        if (frame.size.height < frame.size.width)
+        a = frame.size.height / 2.0;
+        [cv setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
+        [cv setNeedsDisplay:YES];
+        
+        for (RBLine *l in @[weeks, days, hours, minutes, seconds]) {
+            [l setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
+            [l setNeedsDisplay:YES];
+            //[[l layer] setAnchorPoint:CGPointMake(0.5, )];
+        }
+        
+        al = a;
+        
         [self addSubview:cv];
     }
     
@@ -34,6 +64,17 @@
 -(void)runTimeStuff
 {
     time -= 1.0/30.0;
+        
+    double s, m, h, d;
+    s = time;
+    d = s / (60*60*24);
+    m = s / 60;
+    h = [self poorMansMod:(m / 60) modulus:24];
+    m = [self poorMansMod:m modulus:60];
+    s = [self poorMansMod:s modulus:60];
+    //double sRad = [self convertMinuteToRadian:s];
+    //[seconds setFrameCenterRotation:sRad * 360 / M_TAU];
+    
     [self display];
     //[self setNeedsDisplay:YES];
 }
@@ -75,8 +116,16 @@ bool rectsAreSame(NSRect a, NSRect b)
     if (a != al || x != cv.frame.origin.x || y != cv.frame.origin.y) {
         [cv setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
         [cv setNeedsDisplay:YES];
+        
+        for (RBLine *l in @[weeks, days, hours, minutes, seconds]) {
+            [l setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
+            [l setNeedsDisplay:YES];
+            [[l layer] setAnchorPoint:CGPointMake(x, y)];
+        }
+        
         al = a;
     }
+    
     NSPoint center = NSMakePoint(x, y);
     NSPoint weekPoint, dayPoint, hourPoint, minutePoint, secondPoint;
     double s, m, h, d, w;
