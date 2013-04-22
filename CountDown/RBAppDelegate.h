@@ -13,14 +13,26 @@
 {
     IBOutlet NSDatePicker *dp;
     IBOutlet NSTextField *tf;
+    IBOutlet NSPopUpButton *pub;
     IBOutlet RBCountDownClock *cdc;
+    dispatch_queue_t queue;
     NSDate *date;
+    NSString *title;
     NSThread *thread;
+    
+    NSDateFormatter *df;
+    
+    NSMenu *pubMenu;
+    NSArray *_reminders;
+    NSArray *_events;
+    NSMutableDictionary *eventItems;
+    
+    
+    NSStatusItem *barItem;
 }
 
 @property (assign) IBOutlet NSWindow *window;
 
 -(void)updateThread;
-//-(IBAction)DateChanged:(id)sender;
 
 @end
