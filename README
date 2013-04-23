@@ -4,13 +4,11 @@ The clock shown has 5 hands - seconds, minutes, hours, days, and weeks.
 Seconds has a red color.     (FF0000)
 Minutes has an orange color. (FF7700)
 Hours has a green color.     (00FF00)
-Days has a teal color.       (0077FF)
-Weeks has a blue color.      (0000FF)
+Days has a blue color.       (0000FF)
+Weeks has a magenta color.      (FF00FF)
 
 The clock counts down, which is why all of the hands move counter-clockwise.
 
 Clock hands will disappear as the event approaches (e.g. if there is 6 or less days until the date, the week hand will not appear)
 
 Hours and Weeks are modulo 12, days are modulo 7, minutes and seconds are modulo 60, as is standard on a clock.
-
-The initial countdown date (May 14, 2013 - 8:45 AM PDT) has special meaning to me, in a future commit, this date will likely change.
