@@ -22,6 +22,7 @@
     [refreshButton setTarget:self];
     [refreshButton sendActionOn:NSLeftMouseUpMask];
     
+    _window.delegate = self;
     isWindowClosed = NO;
     
     title = [[NSUserDefaults standardUserDefaults] stringForKey:TITLE_KEY];
@@ -74,6 +75,15 @@
     [barItem setTarget:self];
     [barItem sendActionOn:NSLeftMouseUpMask];
 #endif
+}
+
+-(void)windowWillClose:(NSNotification *)notification
+{
+    NSWindow *w = notification.object;
+    if (w == _window) {
+        isWindowClosed = YES;
+        [showHide setTitle:@"Show Window"];
+    }
 }
 
 -(void)quit:(id)sender

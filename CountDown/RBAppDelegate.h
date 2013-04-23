@@ -11,7 +11,7 @@
 #import "RBPreferences.h"
 
 
-@interface RBAppDelegate : NSObject <NSApplicationDelegate, NSDatePickerCellDelegate>
+@interface RBAppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate, NSDatePickerCellDelegate>
 {
     IBOutlet NSDatePicker *dp;
     IBOutlet NSTextField *tf;
