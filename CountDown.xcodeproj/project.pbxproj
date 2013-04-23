@@ -17,7 +17,9 @@
 		8937F1AC16FC97C0006E55D9 /* RBClockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8937F1AB16FC97C0006E55D9 /* RBClockView.m */; };
 		89724BE1171E1E9C00D9F909 /* RBLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 89724BE0171E1E9C00D9F909 /* RBLine.m */; };
 		899DF7E41724C9DE00756B19 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 899DF7E31724C9DE00756B19 /* EventKit.framework */; };
-		899DF7EA172570CB00756B19 /* RBEventPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 899DF7E9172570CB00756B19 /* RBEventPicker.m */; };
+		899DF7EF1725C27500756B19 /* RBPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 899DF7EE1725C27500756B19 /* RBPreferences.m */; };
+		899DF7F11725C44400756B19 /* PreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 899DF7F01725C44400756B19 /* PreferencesWindow.xib */; };
+		899DF7F31726046D00756B19 /* AboutMe.xib in Resources */ = {isa = PBXBuildFile; fileRef = 899DF7F21726046D00756B19 /* AboutMe.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,8 +43,10 @@
 		89724BDF171E1E9C00D9F909 /* RBLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBLine.h; sourceTree = "<group>"; };
 		89724BE0171E1E9C00D9F909 /* RBLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBLine.m; sourceTree = "<group>"; };
 		899DF7E31724C9DE00756B19 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
-		899DF7E8172570CB00756B19 /* RBEventPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBEventPicker.h; sourceTree = "<group>"; };
-		899DF7E9172570CB00756B19 /* RBEventPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBEventPicker.m; sourceTree = "<group>"; };
+		899DF7ED1725C27500756B19 /* RBPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBPreferences.h; sourceTree = "<group>"; };
+		899DF7EE1725C27500756B19 /* RBPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBPreferences.m; sourceTree = "<group>"; };
+		899DF7F01725C44400756B19 /* PreferencesWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesWindow.xib; sourceTree = "<group>"; };
+		899DF7F21726046D00756B19 /* AboutMe.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutMe.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,8 +104,10 @@
 			children = (
 				8937F19C16FAF68C006E55D9 /* RBAppDelegate.h */,
 				8937F19D16FAF68C006E55D9 /* RBAppDelegate.m */,
-				899DF7E8172570CB00756B19 /* RBEventPicker.h */,
-				899DF7E9172570CB00756B19 /* RBEventPicker.m */,
+				899DF7ED1725C27500756B19 /* RBPreferences.h */,
+				899DF7EE1725C27500756B19 /* RBPreferences.m */,
+				899DF7F01725C44400756B19 /* PreferencesWindow.xib */,
+				899DF7F21726046D00756B19 /* AboutMe.xib */,
 				89724BDF171E1E9C00D9F909 /* RBLine.h */,
 				89724BE0171E1E9C00D9F909 /* RBLine.m */,
 				8937F1A716FB0A04006E55D9 /* RBCountDownClock.h */,
@@ -181,6 +187,8 @@
 				8937F19516FAF68C006E55D9 /* InfoPlist.strings in Resources */,
 				8937F19B16FAF68C006E55D9 /* Credits.rtf in Resources */,
 				8937F1A116FAF68C006E55D9 /* MainMenu.xib in Resources */,
+				899DF7F11725C44400756B19 /* PreferencesWindow.xib in Resources */,
+				899DF7F31726046D00756B19 /* AboutMe.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,7 +204,7 @@
 				8937F1A916FB0A04006E55D9 /* RBCountDownClock.m in Sources */,
 				8937F1AC16FC97C0006E55D9 /* RBClockView.m in Sources */,
 				89724BE1171E1E9C00D9F909 /* RBLine.m in Sources */,
-				899DF7EA172570CB00756B19 /* RBEventPicker.m in Sources */,
+				899DF7EF1725C27500756B19 /* RBPreferences.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

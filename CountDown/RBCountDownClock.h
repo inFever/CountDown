@@ -12,16 +12,25 @@
 
 #import "RBLine.h"
 
-@interface RBCountDownClock : NSView
+@interface RBCountDownClock : NSView <NSMenuDelegate>
 {
     NSTimeInterval time;
     double al;
     NSTimer *t;
     RBClockView *cv;
     
+    bool isStatusItem;
+    bool isMenuVisible;
+    
+    void (^onClick)(void);
+    
     RBLine *weeks, *days, *hours, *minutes, *seconds;
 }
 
+@property (nonatomic, weak) NSStatusItem *statusItem;
+
+-(id)initWithFrame:(NSRect)frameRect statusItem:(BOOL)isStatusBar;
+-(void)setOnClick:(void (^)(void))action;
 -(void)updateTime:(NSTimeInterval)newTime;
 
 @end

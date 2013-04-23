@@ -9,9 +9,6 @@
 #import "RBAppDelegate.h"
 #import <EventKit/EventKit.h>
 
-#define DATE_KEY @"RBDate"
-#define TITLE_KEY @"RBTitle"
-
 @implementation RBAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
@@ -20,6 +17,12 @@
     //[[self window] setLevel:NSFloatingWindowLevel];
     queue = dispatch_queue_create("queue", 0);
     [self retrieveEvents];
+    
+    [refreshButton setAction:@selector(retrieveEvents)];
+    [refreshButton setTarget:self];
+    [refreshButton sendActionOn:NSLeftMouseUpMask];
+    
+    isWindowClosed = NO;
     
     title = [[NSUserDefaults standardUserDefaults] stringForKey:TITLE_KEY];
     if (title == nil)
@@ -37,11 +40,58 @@
     
     NSStatusBar *bar = [NSStatusBar systemStatusBar];
     barItem = [bar statusItemWithLength:NSVariableStatusItemLength];
+    statusBarClock = [[RBCountDownClock alloc] initWithFrame:NSMakeRect(0, 0, [bar thickness] + 6, [bar thickness] - 10) statusItem:YES];
+    //__block RBAppDelegate *s = self;
+    
+    NSMenu *statusBarMenu = [[NSMenu alloc] initWithTitle:@""];
+    NSMenuItem *about = [[NSMenuItem alloc] initWithTitle:@"About CountDown" action:@selector(launchAboutMe:) keyEquivalent:@""];
+    [about setTarget:self];
+    NSMenuItem *preferences = [[NSMenuItem alloc] initWithTitle:@"Preferences..." action:@selector(launchPreferences:) keyEquivalent:@""];
+    [preferences setTarget:self];
+    showHide = [[NSMenuItem alloc] initWithTitle:@"Hide Window" action:@selector(showHide:) keyEquivalent:@""];
+    [showHide setTarget:self];
+    NSMenuItem *quit = [[NSMenuItem alloc] initWithTitle:@"Quit CountDown" action:@selector(quit:) keyEquivalent:@"q"];
+    [quit setTarget:self];
+    [statusBarMenu addItem:about];
+    [statusBarMenu addItem:preferences];
+    [statusBarMenu addItem:[NSMenuItem separatorItem]];
+    [statusBarMenu addItem:showHide];
+    [statusBarMenu addItem:[NSMenuItem separatorItem]];
+    [statusBarMenu addItem:quit];
+    [statusBarClock setMenu:statusBarMenu];
+    
+    statusBarClock.statusItem = barItem;
+    
+    /*
+    [statusBarClock setOnClick:^{
+        [barItem popUpStatusItemMenu:statusBarMenu];
+    }];
+     */
+    
+    [barItem setView:statusBarClock];
     [barItem setTitle:@"CountDown"];
     [barItem setAction:@selector(showWindow)];
     [barItem setTarget:self];
     [barItem sendActionOn:NSLeftMouseUpMask];
 #endif
+}
+
+-(void)quit:(id)sender
+{
+    [NSApp performSelector:@selector(terminate:) withObject:nil afterDelay:0.0];
+}
+
+-(void)showHide:(id)sender
+{
+    if (!isWindowClosed) {
+        [_window close];
+        isWindowClosed = YES;
+        [showHide setTitle:@"Show Window"];
+    } else {
+        [self showWindow];
+        [showHide setTitle:@"Hide Window"];
+    }
+    
 }
 
 -(void)retrieveEvents
@@ -67,17 +117,40 @@
 #endif
 }
 
+-(IBAction)launchPreferences:(id)sender
+{
+    if (!prefs)
+        prefs = [[RBPreferences alloc] init];
+    [prefs updateKnownPrefs];
+    [prefs showWindow];
+}
+
+-(IBAction)launchAboutMe:(id)sender
+{
+    aboutMe = [[NSWindowController alloc] initWithWindowNibName:@"AboutMe"];
+    [[aboutMe window] setLevel:NSFloatingWindowLevel];
+}
+
 -(void)showWindow
 {
     [_window makeKeyAndOrderFront:nil];
+    isWindowClosed = NO;
 }
 
 -(void)setEvent:(id)sender
 {
     NSMenuItem *i = (NSMenuItem *)sender;
     NSString *key = [i title];
-    date = (NSDate *)[eventItems objectForKey:key];
-    title = key;
+    EKCalendarItem *e = (EKCalendarItem *)[eventItems objectForKey:key];
+    NSDate *now = [NSDate date];
+    for (EKAlarm *a in [e alarms]) {
+        if ([[a absoluteDate] earlierDate:now] != now)
+            continue;
+        date = [a absoluteDate];
+        break;
+    }
+
+    title = [e title];
     
     [[NSUserDefaults standardUserDefaults] setObject:title forKey:TITLE_KEY];
     [[NSUserDefaults standardUserDefaults] setObject:date forKey:DATE_KEY];
@@ -128,14 +201,26 @@
                     return (NSComparisonResult)NSOrderedSame;
             }
         }];
+        NSDate *now = [NSDate date];
         for (EKEvent *e in events) {
-            NSDate *d = [[[e alarms] objectAtIndex:0] absoluteDate];
+            NSDate *d = nil;
+            for (EKAlarm *a in [e alarms]) {
+                if ([[a absoluteDate] earlierDate:now] != now)
+                    continue;
+                d = [a absoluteDate];
+                break;
+            }
+            if (d == nil)
+                continue;
             NSString *t = [e title];
-            NSMenuItem *i = [[NSMenuItem alloc] initWithTitle:t action:@selector(setEvent:) keyEquivalent:@""];
+            NSString *s = [NSString stringWithFormat:@"%@ - %@", t, d];
+            if ([eventItems objectForKey:s] != nil)
+                continue;
+            NSMenuItem *i = [[NSMenuItem alloc] initWithTitle:s action:@selector(setEvent:) keyEquivalent:@""];
             [i setTarget:self];
             if (d != nil) {
                 [pubMenu addItem:i];
-                [eventItems setValue:d forKey:t];
+                [eventItems setValue:e forKey:s];
             }
         }
     });
@@ -182,15 +267,27 @@
                 else
                     return (NSComparisonResult)NSOrderedSame;
             }
-        }];        
+        }];
+        NSDate *now = [NSDate date];
         for (EKReminder *e in reminders) {
-            NSDate *d = [[[e alarms] objectAtIndex:0] absoluteDate];
+            NSDate *d = nil;
+            for (EKAlarm *a in [e alarms]) {
+                if ([[a absoluteDate] earlierDate:now] != now)
+                    continue;
+                d = [a absoluteDate];
+                break;
+            }
+            if (d == nil)
+                continue;
             NSString *t = [e title];
-            NSMenuItem *i = [[NSMenuItem alloc] initWithTitle:t action:@selector(setEvent:) keyEquivalent:@""];
+            NSString *s = [NSString stringWithFormat:@"%@ - %@", t, d];
+            if ([eventItems objectForKey:s] != nil)
+                continue;
+            NSMenuItem *i = [[NSMenuItem alloc] initWithTitle:s action:@selector(setEvent:) keyEquivalent:@""];
             [i setTarget:self];
             if (d != nil) {
                 [pubMenu addItem:i];
-                [eventItems setValue:d forKey:t];
+                [eventItems setValue:e forKey:s];
             }
         }
     }];
@@ -243,10 +340,14 @@
 -(void)internalUpdate
 {
     NSString *toDisplay = [self genStringFromDate:date];
+    title = [[NSUserDefaults standardUserDefaults] stringForKey:TITLE_KEY];
     barItem.toolTip = [NSString stringWithFormat:@"%@: %@", title, toDisplay];
     toDisplay = [NSString stringWithFormat:@"Time until %@:\n%@", title, toDisplay];
     tf.stringValue = toDisplay;
-    dispatch_async(dispatch_get_main_queue(), ^{[cdc updateTime:[date timeIntervalSinceNow]];});
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [cdc updateTime:[date timeIntervalSinceNow]];
+        [statusBarClock updateTime:[date timeIntervalSinceNow]];
+    });
 }
 
 

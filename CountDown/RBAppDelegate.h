@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "RBCountDownClock.h"
+#import "RBPreferences.h"
+
 
 @interface RBAppDelegate : NSObject <NSApplicationDelegate, NSDatePickerCellDelegate>
 {
@@ -15,6 +17,7 @@
     IBOutlet NSTextField *tf;
     IBOutlet NSPopUpButton *pub;
     IBOutlet RBCountDownClock *cdc;
+    IBOutlet NSButton *refreshButton;
     dispatch_queue_t queue;
     NSDate *date;
     NSString *title;
@@ -25,12 +28,21 @@
     NSMenu *pubMenu;
     NSMutableDictionary *eventItems;
     
+    RBCountDownClock *statusBarClock;
+    NSMenuItem *showHide;
     
-    NSStatusItem *barItem;
+    RBPreferences *prefs;
+    BOOL isWindowClosed;
+    
+    NSWindowController *aboutMe;
+    
+    __block NSStatusItem *barItem;
 }
 
 @property (assign) IBOutlet NSWindow *window;
 
 -(void)updateThread;
+-(IBAction)launchAboutMe:(id)sender;
+-(IBAction)launchPreferences:(id)sender;
 
 @end

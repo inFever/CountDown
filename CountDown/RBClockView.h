@@ -10,4 +10,7 @@
 
 @interface RBClockView : NSView
 
+@property (nonatomic) bool statusItem;
+@property (nonatomic, strong) NSColor *drawColor;
+
 @end

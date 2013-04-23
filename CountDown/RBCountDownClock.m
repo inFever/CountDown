@@ -7,53 +7,59 @@
 //
 
 #import "RBCountDownClock.h"
+#import "RBPreferences.h"
 
 #define M_TAU (2*M_PI)
 
 @implementation RBCountDownClock
 
+-(id)initWithFrame:(NSRect)frameRect statusItem:(BOOL)isStatusBar
+{
+    if ((self = [super initWithFrame:frameRect]) != nil) {
+        [self commonInit:isStatusBar];
+    }
+    return self;
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        time = 0;
-        al = 10;
-        t = [NSTimer scheduledTimerWithTimeInterval:1.0/30.0 target:self selector:@selector(runTimeStuff) userInfo:nil repeats:YES];
-        cv = [[RBClockView alloc] initWithFrame:frame];
-        
-        weeks = [[RBLine alloc] initWithFrame:frame];
-        weeks.color = [NSColor blueColor];
-        days = [[RBLine alloc] initWithFrame:frame];
-        days.color = [NSColor colorWithSRGBRed:0 green:0.5 blue:1.0 alpha:1.0];
-        hours = [[RBLine alloc] initWithFrame:frame];
-        hours.color = [NSColor greenColor];
-        minutes = [[RBLine alloc] initWithFrame:frame];
-        minutes.color = [NSColor orangeColor];
-        seconds = [[RBLine alloc] initWithFrame:frame];
-        seconds.color = [NSColor redColor];
-        
-        //[self addSubview:seconds];
-        
-        double x = frame.origin.x + (frame.size.width / 2.0);
-        double y = frame.origin.y + (frame.size.height / 2.0);
-        double a = frame.size.width / 2.0;
-        if (frame.size.height < frame.size.width)
-        a = frame.size.height / 2.0;
-        [cv setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
-        [cv setNeedsDisplay:YES];
-        
-        for (RBLine *l in @[weeks, days, hours, minutes, seconds]) {
-            [l setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
-            [l setNeedsDisplay:YES];
-            //[[l layer] setAnchorPoint:CGPointMake(0.5, )];
-        }
-        
-        al = a;
-        
-        [self addSubview:cv];
+        [self commonInit:NO];
     }
     
     return self;
+}
+
+-(void)setOnClick:(void (^)(void))action
+{
+    onClick = action;
+}
+
+-(void)commonInit:(bool)statusItem
+{
+    isStatusItem = statusItem;
+    isMenuVisible = NO;
+    NSRect frame = _frame;
+    time = 0;
+    al = 10;
+    t = [NSTimer scheduledTimerWithTimeInterval:1.0/30.0 target:self selector:@selector(runTimeStuff) userInfo:nil repeats:YES];
+    cv = [[RBClockView alloc] initWithFrame:frame];
+    
+    //[self addSubview:seconds];
+    
+    double x = frame.origin.x + (frame.size.width / 2.0);
+    double y = frame.origin.y + (frame.size.height / 2.0);
+    double a = frame.size.width / 2.0;
+    if (frame.size.height < frame.size.width)
+        a = frame.size.height / 2.0;
+    [cv setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
+    [cv setStatusItem:statusItem];
+    [cv setNeedsDisplay:YES];
+    
+    al = a;
+    
+    [self addSubview:cv];
 }
 
 -(void)updateTime:(NSTimeInterval)newTime
@@ -64,19 +70,10 @@
 -(void)runTimeStuff
 {
     time -= 1.0/30.0;
-        
-    double s, m, h, d;
-    s = time;
-    d = s / (60*60*24);
-    m = s / 60;
-    h = [self poorMansMod:(m / 60) modulus:24];
-    m = [self poorMansMod:m modulus:60];
-    s = [self poorMansMod:s modulus:60];
-    //double sRad = [self convertMinuteToRadian:s];
-    //[seconds setFrameCenterRotation:sRad * 360 / M_TAU];
+    if (time < 0)
+        time = 0;
     
     [self display];
-    //[self setNeedsDisplay:YES];
 }
 
 -(double)convertHourToRadian:(double)hour
@@ -106,23 +103,56 @@ bool rectsAreSame(NSRect a, NSRect b)
            a.size.height == b.size.height;
 }
 
+-(void)mouseDown:(NSEvent *)theEvent
+{
+    if (onClick)
+        onClick();
+    if (isStatusItem) {
+        [[self menu] setDelegate:self];
+        [_statusItem popUpStatusItemMenu:[self menu]];
+    }
+    [cv setDrawColor:[self titleForegroundColor]];
+    [cv setNeedsDisplay:YES];
+}
+
+-(void)menuWillOpen:(NSMenu *)menu
+{
+    isMenuVisible = YES;
+    [self setNeedsDisplay:YES];
+}
+
+-(void)menuDidClose:(NSMenu *)menu
+{
+    isMenuVisible = NO;
+    [menu setDelegate:nil];
+    [self setNeedsDisplay:YES];
+}
+
+-(NSColor *)titleForegroundColor {
+    if (isMenuVisible)
+        return [NSColor whiteColor];
+    else
+        return [NSColor blackColor];
+}
+
 - (void)drawRect:(NSRect)dirtyRect
 {
+    if (isStatusItem) {
+        [_statusItem drawStatusBarBackgroundInRect:[self bounds] withHighlight:isMenuVisible];
+    }
     double x = dirtyRect.origin.x + (dirtyRect.size.width / 2.0);
     double y = dirtyRect.origin.y + (dirtyRect.size.height / 2.0);
     double a = dirtyRect.size.width / 2.0;
     if (dirtyRect.size.height < dirtyRect.size.width)
         a = dirtyRect.size.height / 2.0;
+    if (isStatusItem) {
+        y = 11;
+        a = 8;
+    }
     if (a != al || x != cv.frame.origin.x || y != cv.frame.origin.y) {
         [cv setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
         [cv setNeedsDisplay:YES];
-        
-        for (RBLine *l in @[weeks, days, hours, minutes, seconds]) {
-            [l setFrame:NSMakeRect(x-a, y-a, a*2, a*2)];
-            [l setNeedsDisplay:YES];
-            [[l layer] setAnchorPoint:CGPointMake(x, y)];
-        }
-        
+    
         al = a;
     }
     
@@ -151,34 +181,79 @@ bool rectsAreSame(NSRect a, NSRect b)
     
     NSBezierPath *lines;
     
+    NSColor *week, *day, *hour, *minute, *second;
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSData *data;
+    data = [ud objectForKey:WEEK_KEY];
+    if (data)
+        week = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if (!week) {
+        week = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        week = [NSColor magentaColor];
+        data = [NSKeyedArchiver archivedDataWithRootObject:week];
+        [ud setObject:data forKey:WEEK_KEY];
+    }
+    data = [ud objectForKey:DAY_KEY];
+    if (data)
+        day = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if (!day) {
+        day = [NSColor blueColor];
+        data = [NSKeyedArchiver archivedDataWithRootObject:day];
+        [ud setObject:data forKey:DAY_KEY];
+    }
+    data = [ud objectForKey:HOUR_KEY];
+    if (data)
+        hour = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if (!hour) {
+        hour = [NSColor greenColor];
+        data = [NSKeyedArchiver archivedDataWithRootObject:hour];
+        [ud setObject:data forKey:HOUR_KEY];
+    }
+    data = [ud objectForKey:MINUTE_KEY];
+    if (data)
+        minute = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if (!minute) {
+        minute = [NSColor orangeColor];
+        data = [NSKeyedArchiver archivedDataWithRootObject:minute];
+        [ud setObject:data forKey:MINUTE_KEY];
+    }
+    data = [ud objectForKey:SECOND_KEY];
+    if (data)
+        second = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if (!second) {
+        second = [NSColor redColor];
+        data = [NSKeyedArchiver archivedDataWithRootObject:second];
+        [ud setObject:data forKey:SECOND_KEY];
+    }
+    
     lines = [NSBezierPath bezierPath];
     [lines moveToPoint:center];
     [lines lineToPoint:weekPoint];
-    [[NSColor blueColor] set];
+    [week set];
     [lines stroke];
     
     lines = [NSBezierPath bezierPath];
     [lines moveToPoint:center];
     [lines lineToPoint:dayPoint];
-    [[NSColor colorWithSRGBRed:0 green:0.5 blue:1.0 alpha:1.0] set];
+    [day set];
     [lines stroke];
     
     lines = [NSBezierPath bezierPath];
     [lines moveToPoint:center];
     [lines lineToPoint:hourPoint];
-    [[NSColor greenColor] set];
+    [hour set];
     [lines stroke];
     
     lines = [NSBezierPath bezierPath];
     [lines moveToPoint:center];
     [lines lineToPoint:minutePoint];
-    [[NSColor orangeColor] set];
+    [minute set];
     [lines stroke];
     
     lines = [NSBezierPath bezierPath];
     [lines moveToPoint:center];
     [lines lineToPoint:secondPoint];
-    [[NSColor redColor] set];
+    [second set];
     [lines stroke];
 }
 
