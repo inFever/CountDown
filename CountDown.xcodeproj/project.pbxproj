@@ -15,11 +15,12 @@
 		8937F1A116FAF68C006E55D9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8937F19F16FAF68C006E55D9 /* MainMenu.xib */; };
 		8937F1A916FB0A04006E55D9 /* RBCountDownClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 8937F1A816FB0A04006E55D9 /* RBCountDownClock.m */; };
 		8937F1AC16FC97C0006E55D9 /* RBClockView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8937F1AB16FC97C0006E55D9 /* RBClockView.m */; };
-		89724BE1171E1E9C00D9F909 /* RBLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 89724BE0171E1E9C00D9F909 /* RBLine.m */; };
 		899DF7E41724C9DE00756B19 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 899DF7E31724C9DE00756B19 /* EventKit.framework */; };
 		899DF7EF1725C27500756B19 /* RBPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 899DF7EE1725C27500756B19 /* RBPreferences.m */; };
 		899DF7F11725C44400756B19 /* PreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 899DF7F01725C44400756B19 /* PreferencesWindow.xib */; };
 		899DF7F31726046D00756B19 /* AboutMe.xib in Resources */ = {isa = PBXBuildFile; fileRef = 899DF7F21726046D00756B19 /* AboutMe.xib */; };
+		89D81D5B17275D4200C7B289 /* RBStatusBarHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 89D81D5A17275D4200C7B289 /* RBStatusBarHandler.m */; };
+		89D81D5E1727670100C7B289 /* RBClockArms.m in Sources */ = {isa = PBXBuildFile; fileRef = 89D81D5D1727670100C7B289 /* RBClockArms.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,13 +41,15 @@
 		8937F1A816FB0A04006E55D9 /* RBCountDownClock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBCountDownClock.m; sourceTree = "<group>"; };
 		8937F1AA16FC97C0006E55D9 /* RBClockView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBClockView.h; sourceTree = "<group>"; };
 		8937F1AB16FC97C0006E55D9 /* RBClockView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBClockView.m; sourceTree = "<group>"; };
-		89724BDF171E1E9C00D9F909 /* RBLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBLine.h; sourceTree = "<group>"; };
-		89724BE0171E1E9C00D9F909 /* RBLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBLine.m; sourceTree = "<group>"; };
 		899DF7E31724C9DE00756B19 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		899DF7ED1725C27500756B19 /* RBPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBPreferences.h; sourceTree = "<group>"; };
 		899DF7EE1725C27500756B19 /* RBPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBPreferences.m; sourceTree = "<group>"; };
 		899DF7F01725C44400756B19 /* PreferencesWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesWindow.xib; sourceTree = "<group>"; };
 		899DF7F21726046D00756B19 /* AboutMe.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutMe.xib; sourceTree = "<group>"; };
+		89D81D5917275D4200C7B289 /* RBStatusBarHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBStatusBarHandler.h; sourceTree = "<group>"; };
+		89D81D5A17275D4200C7B289 /* RBStatusBarHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBStatusBarHandler.m; sourceTree = "<group>"; };
+		89D81D5C1727670100C7B289 /* RBClockArms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBClockArms.h; sourceTree = "<group>"; };
+		89D81D5D1727670100C7B289 /* RBClockArms.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBClockArms.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,14 +107,16 @@
 			children = (
 				8937F19C16FAF68C006E55D9 /* RBAppDelegate.h */,
 				8937F19D16FAF68C006E55D9 /* RBAppDelegate.m */,
+				89D81D5917275D4200C7B289 /* RBStatusBarHandler.h */,
+				89D81D5A17275D4200C7B289 /* RBStatusBarHandler.m */,
 				899DF7ED1725C27500756B19 /* RBPreferences.h */,
 				899DF7EE1725C27500756B19 /* RBPreferences.m */,
 				899DF7F01725C44400756B19 /* PreferencesWindow.xib */,
 				899DF7F21726046D00756B19 /* AboutMe.xib */,
-				89724BDF171E1E9C00D9F909 /* RBLine.h */,
-				89724BE0171E1E9C00D9F909 /* RBLine.m */,
 				8937F1A716FB0A04006E55D9 /* RBCountDownClock.h */,
 				8937F1A816FB0A04006E55D9 /* RBCountDownClock.m */,
+				89D81D5C1727670100C7B289 /* RBClockArms.h */,
+				89D81D5D1727670100C7B289 /* RBClockArms.m */,
 				8937F1AA16FC97C0006E55D9 /* RBClockView.h */,
 				8937F1AB16FC97C0006E55D9 /* RBClockView.m */,
 				8937F19F16FAF68C006E55D9 /* MainMenu.xib */,
@@ -203,8 +208,9 @@
 				8937F19E16FAF68C006E55D9 /* RBAppDelegate.m in Sources */,
 				8937F1A916FB0A04006E55D9 /* RBCountDownClock.m in Sources */,
 				8937F1AC16FC97C0006E55D9 /* RBClockView.m in Sources */,
-				89724BE1171E1E9C00D9F909 /* RBLine.m in Sources */,
 				899DF7EF1725C27500756B19 /* RBPreferences.m in Sources */,
+				89D81D5B17275D4200C7B289 /* RBStatusBarHandler.m in Sources */,
+				89D81D5E1727670100C7B289 /* RBClockArms.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

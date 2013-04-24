@@ -8,9 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "RBClockArms.h"
+
 @interface RBClockView : NSView
+{
+    RBClockArms *arms;
+}
 
 @property (nonatomic) bool statusItem;
 @property (nonatomic, strong) NSColor *drawColor;
+
+-(void)update:(NSTimeInterval)time;
 
 @end

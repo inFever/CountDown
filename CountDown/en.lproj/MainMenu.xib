@@ -812,22 +812,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 					</object>
 					<int key="connectionID">617</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">launchPreferences:</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="609285721"/>
-					</object>
-					<int key="connectionID">619</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">launchAboutMe:</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="238522557"/>
-					</object>
-					<int key="connectionID">620</int>
-				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -1589,7 +1573,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 				<string key="29.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="371.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="371.IBWindowTemplateEditedContentRect">{{380, 496}, {480, 360}}</string>
-				<integer value="1" key="371.NSWindowTemplate.visibleAtLaunch"/>
+				<boolean value="NO" key="371.NSWindowTemplate.visibleAtLaunch"/>
 				<array key="372.IBNSViewMetadataConstraints">
 					<reference ref="993752858"/>
 					<reference ref="801059261"/>
@@ -1683,20 +1667,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 				<object class="IBPartialClassDescription">
 					<string key="className">RBAppDelegate</string>
 					<string key="superclassName">NSObject</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="launchAboutMe:">id</string>
-						<string key="launchPreferences:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="launchAboutMe:">
-							<string key="name">launchAboutMe:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="launchPreferences:">
-							<string key="name">launchPreferences:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="cdc">RBCountDownClock</string>
 						<string key="dp">NSDatePicker</string>

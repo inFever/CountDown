@@ -18,9 +18,17 @@
     if (self) {
         // Initialization code here.
         _drawColor = [NSColor blackColor];
+        
+        //arms = [[RBClockArms alloc] initWithFrame:frame];
+        //[self addSubview:arms];
     }
     
     return self;
+}
+
+-(void)update:(NSTimeInterval)time
+{
+    [arms updateTime:time];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -28,6 +36,7 @@
     NSBezierPath *circle = [NSBezierPath bezierPathWithOvalInRect:dirtyRect];
     [_drawColor set];
     if (!_statusItem) {
+        [[NSColor whiteColor] setFill];
         double x, y;
         double al = dirtyRect.size.width/2.0;
         double jl = al * 0.9;
@@ -54,6 +63,7 @@
             [circle moveToPoint:p];
             [circle lineToPoint:q];
         }
+        [circle fill];
     }
     [circle stroke];
 }

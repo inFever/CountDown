@@ -10,6 +10,8 @@
 #import "RBCountDownClock.h"
 #import "RBPreferences.h"
 
+#import "RBStatusBarHandler.h"
+
 
 @interface RBAppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate, NSDatePickerCellDelegate>
 {
@@ -22,27 +24,15 @@
     NSDate *date;
     NSString *title;
     NSThread *thread;
-    
-    NSDateFormatter *df;
-    
+            
     NSMenu *pubMenu;
     NSMutableDictionary *eventItems;
     
-    RBCountDownClock *statusBarClock;
-    NSMenuItem *showHide;
-    
-    RBPreferences *prefs;
-    BOOL isWindowClosed;
-    
-    NSWindowController *aboutMe;
-    
-    __block NSStatusItem *barItem;
+    RBStatusBarHandler *statusBar;
 }
 
 @property (assign) IBOutlet NSWindow *window;
 
 -(void)updateThread;
--(IBAction)launchAboutMe:(id)sender;
--(IBAction)launchPreferences:(id)sender;
 
 @end

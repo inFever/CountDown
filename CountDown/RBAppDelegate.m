@@ -22,9 +22,6 @@
     [refreshButton setTarget:self];
     [refreshButton sendActionOn:NSLeftMouseUpMask];
     
-    _window.delegate = self;
-    isWindowClosed = NO;
-    
     title = [[NSUserDefaults standardUserDefaults] stringForKey:TITLE_KEY];
     if (title == nil)
         title = @"Unknown";
@@ -39,69 +36,10 @@
 #ifdef TARGET_OS_MAC
     [_window setReleasedWhenClosed:NO];
     
-    NSStatusBar *bar = [NSStatusBar systemStatusBar];
-    barItem = [bar statusItemWithLength:NSVariableStatusItemLength];
-    statusBarClock = [[RBCountDownClock alloc] initWithFrame:NSMakeRect(0, 0, [bar thickness] + 6, [bar thickness] - 10) statusItem:YES];
-    //__block RBAppDelegate *s = self;
-    
-    NSMenu *statusBarMenu = [[NSMenu alloc] initWithTitle:@""];
-    NSMenuItem *about = [[NSMenuItem alloc] initWithTitle:@"About CountDown" action:@selector(launchAboutMe:) keyEquivalent:@""];
-    [about setTarget:self];
-    NSMenuItem *preferences = [[NSMenuItem alloc] initWithTitle:@"Preferences..." action:@selector(launchPreferences:) keyEquivalent:@""];
-    [preferences setTarget:self];
-    showHide = [[NSMenuItem alloc] initWithTitle:@"Hide Window" action:@selector(showHide:) keyEquivalent:@""];
-    [showHide setTarget:self];
-    NSMenuItem *quit = [[NSMenuItem alloc] initWithTitle:@"Quit CountDown" action:@selector(quit:) keyEquivalent:@"q"];
-    [quit setTarget:self];
-    [statusBarMenu addItem:about];
-    [statusBarMenu addItem:preferences];
-    [statusBarMenu addItem:[NSMenuItem separatorItem]];
-    [statusBarMenu addItem:showHide];
-    [statusBarMenu addItem:[NSMenuItem separatorItem]];
-    [statusBarMenu addItem:quit];
-    [statusBarClock setMenu:statusBarMenu];
-    
-    statusBarClock.statusItem = barItem;
-    
-    /*
-    [statusBarClock setOnClick:^{
-        [barItem popUpStatusItemMenu:statusBarMenu];
-    }];
-     */
-    
-    [barItem setView:statusBarClock];
-    [barItem setTitle:@"CountDown"];
-    [barItem setAction:@selector(showWindow)];
-    [barItem setTarget:self];
-    [barItem sendActionOn:NSLeftMouseUpMask];
+    statusBar = [[RBStatusBarHandler alloc] init];
+    statusBar.window = _window;
+    _window.delegate = statusBar;
 #endif
-}
-
--(void)windowWillClose:(NSNotification *)notification
-{
-    NSWindow *w = notification.object;
-    if (w == _window) {
-        isWindowClosed = YES;
-        [showHide setTitle:@"Show Window"];
-    }
-}
-
--(void)quit:(id)sender
-{
-    [NSApp performSelector:@selector(terminate:) withObject:nil afterDelay:0.0];
-}
-
--(void)showHide:(id)sender
-{
-    if (!isWindowClosed) {
-        [_window close];
-        isWindowClosed = YES;
-        [showHide setTitle:@"Show Window"];
-    } else {
-        [self showWindow];
-        [showHide setTitle:@"Hide Window"];
-    }
-    
 }
 
 -(void)retrieveEvents
@@ -125,26 +63,6 @@
             [self updateEventsFromStore:eStore];
     }];
 #endif
-}
-
--(IBAction)launchPreferences:(id)sender
-{
-    if (!prefs)
-        prefs = [[RBPreferences alloc] init];
-    [prefs updateKnownPrefs];
-    [prefs showWindow];
-}
-
--(IBAction)launchAboutMe:(id)sender
-{
-    aboutMe = [[NSWindowController alloc] initWithWindowNibName:@"AboutMe"];
-    [[aboutMe window] setLevel:NSFloatingWindowLevel];
-}
-
--(void)showWindow
-{
-    [_window makeKeyAndOrderFront:nil];
-    isWindowClosed = NO;
 }
 
 -(void)setEvent:(id)sender
@@ -351,12 +269,12 @@
 {
     NSString *toDisplay = [self genStringFromDate:date];
     title = [[NSUserDefaults standardUserDefaults] stringForKey:TITLE_KEY];
-    barItem.toolTip = [NSString stringWithFormat:@"%@: %@", title, toDisplay];
+    statusBar.toolTip = [NSString stringWithFormat:@"%@: %@", title, toDisplay];
     toDisplay = [NSString stringWithFormat:@"Time until %@:\n%@", title, toDisplay];
     tf.stringValue = toDisplay;
     dispatch_async(dispatch_get_main_queue(), ^{
         [cdc updateTime:[date timeIntervalSinceNow]];
-        [statusBarClock updateTime:[date timeIntervalSinceNow]];
+        [statusBar update:[date timeIntervalSinceNow]];
     });
 }
 
